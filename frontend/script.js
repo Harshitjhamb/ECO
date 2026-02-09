@@ -1,6 +1,6 @@
-const BACKEND_BASE = "https://eco-frontend-ruby.vercel.app";
-const API_BASE = "https://eco-frontend-ruby.vercel.app";
-const API_URL = "https://eco-frontend-ruby.vercel.app/api/combined_data";
+const BACKEND_BASE = "https://eco-f2pd.onrender.com";
+const API_BASE = "https://eco-f2pd.onrender.com";
+const API_URL = "https://eco-f2pd.onrender.com/api/combined_data";
 
 
 function removeDuplicates(rows) {
@@ -416,31 +416,31 @@ if (switcher) {
     const heading = document.getElementById("current-station");
     if (heading) heading.textContent = selectedName
     if (user) {
-  try {
-    const res = await fetch(
-      `${API_BASE}/api/station_by_name?name=${encodeURIComponent(selectedName)}`
-    );
-    if (!res.ok) {
-      throw new Error("Failed to fetch station details");
+      try {
+        const res = await fetch(
+          `${API_BASE}/api/station_by_name?name=${encodeURIComponent(selectedName)}`
+        );
+        if (!res.ok) {
+          throw new Error("Failed to fetch station details");
+        }
+        const station = await res.json();
+        if (station && station.station_id) {
+          await fetch(`${API_BASE}/update_favorite_station`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              user_name: user,
+              station_id: station.station_id
+            })
+          });
+        }
+      } catch (err) {
+        console.error("Favorite Station update failed:", err);
+      }
     }
-    const station = await res.json();
-    if (station && station.station_id) {
-      await fetch(`${API_BASE}/update_favorite_station`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_name: user,
-          station_id: station.station_id
-        })
-      });
-    }
-  } catch (err) {
-    console.error("Favorite Station update failed:", err);
-  }
-}
 
 
-  fetchData(selectedName);
+    fetchData(selectedName);
   });
 
 }
@@ -666,10 +666,10 @@ function buildAndRunAdvancedSearch() {
     sql += ` HAVING ${havingParts.join(" AND ")}`;
   }
   if (orderByField) {
-  sql += ` ORDER BY ${orderByField} ${orderDir}`;
-} else {
-  sql += ` ORDER BY pr.location_name ${orderDir}`;
-} console.log("FINAL SQL:\n" + sql);
+    sql += ` ORDER BY ${orderByField} ${orderDir}`;
+  } else {
+    sql += ` ORDER BY pr.location_name ${orderDir}`;
+  } console.log("FINAL SQL:\n" + sql);
   fetch(`${BACKEND_BASE}/adv_search`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -735,58 +735,58 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
   if (document.body.classList.contains("page-dashboard")) {
-  const username = localStorage.getItem("eco_user");
-  let loc = localStorage.getItem("eco_loc");
-  let savedName = localStorage.getItem("eco_loc_name");
-  let user = null;
+    const username = localStorage.getItem("eco_user");
+    let loc = localStorage.getItem("eco_loc");
+    let savedName = localStorage.getItem("eco_loc_name");
+    let user = null;
 
-  // 🔐 Load user ONLY if username exists
-  if (username) {
-    try {
-      const res = await fetch(
-        `${API_BASE}/api/get_user?user_name=${encodeURIComponent(username)}`
-      );
+    // 🔐 Load user ONLY if username exists
+    if (username) {
+      try {
+        const res = await fetch(
+          `${API_BASE}/api/get_user?user_name=${encodeURIComponent(username)}`
+        );
 
-      if (res.ok) {
-        user = await res.json();
+        if (res.ok) {
+          user = await res.json();
+        }
+      } catch (e) {
+        console.error("User load error:", e);
       }
-    } catch (e) {
-      console.error("User load error:", e);
     }
-  }
 
-  // ❌ No station selected → redirect
-  if (!loc) {
-    window.location.href = "search_results.html";
-    return;
-  }
+    // ❌ No station selected → redirect
+    if (!loc) {
+      window.location.href = "search_results.html";
+      return;
+    }
 
-  // 💾 Store age safely (used for AQI warning logic)
-  if (user && user.age != null) {
-    localStorage.setItem("eco_user_age", user.age);
-  }
+    // 💾 Store age safely (used for AQI warning logic)
+    if (user && user.age != null) {
+      localStorage.setItem("eco_user_age", user.age);
+    }
 
-  // 👤 Navbar username
-  const navUser = document.getElementById("nav-user");
-  if (navUser) {
-    navUser.textContent = username || "Guest";
-  }
+    // 👤 Navbar username
+    const navUser = document.getElementById("nav-user");
+    if (navUser) {
+      navUser.textContent = username || "Guest";
+    }
 
-  // 🎂 Navbar age
-  const ageSpan = document.getElementById("nav-age");
-  if (ageSpan && user && user.age != null) {
-    ageSpan.textContent = user.age;
-  }
+    // 🎂 Navbar age
+    const ageSpan = document.getElementById("nav-age");
+    if (ageSpan && user && user.age != null) {
+      ageSpan.textContent = user.age;
+    }
 
-  // 📍 Current station heading
-  const currStation = document.getElementById("current-station");
-  if (currStation) {
-    currStation.textContent = savedName || loc;
-  }
+    // 📍 Current station heading
+    const currStation = document.getElementById("current-station");
+    if (currStation) {
+      currStation.textContent = savedName || loc;
+    }
 
-  // 🚀 Load dashboard data
-  fetchData(loc);
-}
+    // 🚀 Load dashboard data
+    fetchData(loc);
+  }
 
   document.querySelectorAll(".close, .close-btn").forEach(btn => {
     btn.onclick = () => closeModal("modal-trend");
@@ -806,13 +806,20 @@ async function fetchData(loc) {
     const res = await fetch(
       `${API_BASE}/api/combined_data?station=${encodeURIComponent(loc)}`
     );
+
     const raw = await res.json();
-    console.log("Combined data:", raw); 
+    console.log("Combined data:", raw);
+
+    const pol = raw.pollutant || raw.pol || raw[0];
+    const met = raw.weather || raw.met || raw[1];
+
     updateDashboard(pol, met);
+
   } catch (err) {
     console.error("FETCH ERROR:", err);
   }
 }
+
 
 async function updateDashboard(pol, met) {
   window.lastPol = pol;
@@ -1212,8 +1219,8 @@ function initDropdown() {
         localStorage.setItem("eco_loc_name", name);
 
         // ✅ update heading instantly
-const stationEl = document.getElementById("current-station");
-if (stationEl) stationEl.textContent = name;
+        const stationEl = document.getElementById("current-station");
+        if (stationEl) stationEl.textContent = name;
 
         // ✅ refresh dashboard for this station
 
@@ -1292,7 +1299,7 @@ function loadRecent() {
 }
 async function getTrendData(pollutant, station) {
   const res = await fetch(
-    `${API_BASE}api/pollutant_trend?pollutant=${encodeURIComponent(
+    `${API_BASE}/api/pollutant_trend?pollutant=${encodeURIComponent(
       pollutant
     )}&station=${encodeURIComponent(station)}`
   );
