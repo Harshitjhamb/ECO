@@ -192,7 +192,8 @@ def get_db_connection():
     port=3306,
     database=DB_NAME,
     user=DB_USER,
-    password=DB_PASSWORD
+    password=DB_PASSWORD,
+    ssl_disabled=False
     )); 
 
 def safe_time(val):
