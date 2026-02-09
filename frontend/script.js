@@ -1,6 +1,6 @@
-const BACKEND_BASE = "http://127.0.0.1:5001";
-const API_BASE = "http://127.0.0.1:5001";
-const API_URL = "http://127.0.0.1:5001/api/combined_data";
+const BACKEND_BASE = "https://eco-frontend-ruby.vercel.app";
+const API_BASE = "https://eco-frontend-ruby.vercel.app";
+const API_URL = "https://eco-frontend-ruby.vercel.app/api/combined_data";
 
 
 function removeDuplicates(rows) {
