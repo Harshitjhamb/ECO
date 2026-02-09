@@ -164,15 +164,26 @@ try:
 except Exception as e:
     print("WARNING: dotenv not loaded:", e)
 
+# PORT = int(os.getenv("PORT", 5001))
+# HOST = os.getenv("HOST", "0.0.0.0")
+# WEATHERAPI_KEY = os.getenv("WEATHERAPI_KEY", "")
+# INDIA_DATA_API_KEY = os.getenv("INDIA_DATA_API_KEY", "")
+# DB_HOST = os.getenv("DB_HOST", "127.0.0.1")
+# DB_PORT = int(os.getenv("DB_PORT", 3306))
+# DB_USER = os.getenv("DB_USER", "root")
+# DB_PASSWORD = os.getenv("DB_PASSWORD", "Harshit@5993")
+# DB_NAME = os.getenv("DB_NAME", "harshit")
 PORT = int(os.getenv("PORT", 5001))
-HOST = os.getenv("HOST", "0.0.0.0")
-WEATHERAPI_KEY = os.getenv("WEATHERAPI_KEY", "")
-INDIA_DATA_API_KEY = os.getenv("INDIA_DATA_API_KEY", "")
-DB_HOST = os.getenv("DB_HOST", "127.0.0.1")
-DB_PORT = int(os.getenv("DB_PORT", 3306))
-DB_USER = os.getenv("DB_USER", "root")
-DB_PASSWORD = os.getenv("DB_PASSWORD", "Harshit@5993")
-DB_NAME = os.getenv("DB_NAME", "harshit")
+HOST = "0.0.0.0"
+
+WEATHERAPI_KEY = os.getenv("WEATHERAPI_KEY")
+INDIA_DATA_API_KEY = os.getenv("INDIA_DATA_API_KEY")
+
+DB_HOST = os.getenv("DB_HOST")
+DB_PORT = int(os.getenv("DB_PORT", 11773))
+DB_USER = os.getenv("DB_USER")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_NAME = os.getenv("DB_NAME")
 
 def get_db_connection():
     return (mysql.connector.connect(
@@ -1097,4 +1108,4 @@ def adv_search():
 
 if __name__ == "__main__":
     print(f"Starting Flask server at http://{HOST}:{PORT}")
-    app.run(host=HOST, port=PORT, debug=True, use_reloader=False)
+    app.run(host=HOST, port=PORT)
